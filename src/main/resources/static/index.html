@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Threat Archive - 보안 위협 아카이브</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header>
+            <div class="brand-section">
+                <h1>🛡️ Security Threat Archive</h1>
+                <p>네트워크 위협 정보 및 보안 사고 기록 분석 플랫폼</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+                <span id="user-info-badge" style="font-size: 0.85rem; color: var(--text-secondary); background: rgba(255, 255, 255, 0.05); padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid var(--border-color); display: none;"></span>
+                <button class="btn btn-secondary" onclick="openCategoryModal()" id="btn-manage-category" style="display: none;">📁 카테고리 관리</button>
+                <button class="btn btn-danger btn-sm" onclick="handleLogout()" id="btn-logout" style="display: none; padding: 0.6rem 1rem;">🔓 로그아웃</button>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card" id="stat-total">
+                <span class="stat-title">전체 위협 로그</span>
+                <span class="stat-value" id="count-total">0</span>
+                <span class="stat-desc">시스템에 등록된 전체 보안 사고 수</span>
+            </div>
+            <div class="stat-card high-severity" id="stat-high">
+                <span class="stat-title">심각도: HIGH</span>
+                <span class="stat-value" id="count-high">0</span>
+                <span class="stat-desc">즉각적인 조치가 필요한 심각한 위협</span>
+            </div>
+            <div class="stat-card medium-severity" id="stat-medium">
+                <span class="stat-title">심각도: MEDIUM</span>
+                <span class="stat-value" id="count-medium">0</span>
+                <span class="stat-desc">지속적인 모니터링이 요구되는 위험</span>
+            </div>
+            <div class="stat-card low-severity" id="stat-low">
+                <span class="stat-title">심각도: LOW</span>
+                <span class="stat-value" id="count-low">0</span>
+                <span class="stat-desc">일반 정보 보안 침해 및 단순 경고</span>
+            </div>
+        </div>
+
+        <!-- Dashboard Body -->
+        <div class="dashboard-grid" id="dashboard-grid">
+            <!-- Left Panel: Add Log Form -->
+            <div class="panel" id="left-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">📝 새 위협 기록 등록</h2>
+                </div>
+                <form id="threat-form" onsubmit="handleLogSubmit(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="form-category">공격 분류 (Category)</label>
+                        <select class="form-select" id="form-category" required>
+                            <option value="">-- 카테고리 선택 --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="form-name">위협 명칭 (Threat Name)</label>
+                        <input class="form-input" type="text" id="form-name" placeholder="예: Ping of Death Attack" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="form-severity">심각도 수준 (Severity)</label>
+                        <select class="form-select" id="form-severity" required>
+                            <option value="HIGH">🔴 HIGH (높음)</option>
+                            <option value="MEDIUM">🟡 MEDIUM (중간)</option>
+                            <option value="LOW" selected>🟢 LOW (낮음)</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+                        <div style="flex: 1;">
+                            <label class="form-label" for="form-source-ip">출발지 IP</label>
+                            <input class="form-input" type="text" id="form-source-ip" placeholder="예: 192.168.1.100">
+                        </div>
+                        <div style="flex: 1;">
+                            <label class="form-label" for="form-dest-ip">목적지 IP</label>
+                            <input class="form-input" type="text" id="form-dest-ip" placeholder="예: 10.0.0.5">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+                        <div style="flex: 1;">
+                            <label class="form-label" for="form-port">포트 번호</label>
+                            <input class="form-input" type="number" id="form-port" placeholder="예: 80" min="0" max="65535">
+                        </div>
+                        <div style="flex: 1;">
+                            <label class="form-label" for="form-status">처리 상태</label>
+                            <select class="form-select" id="form-status" required>
+                                <option value="DETECTED" selected>🟣 DETECTED (탐지)</option>
+                                <option value="ANALYZING">🔵 ANALYZING (분석중)</option>
+                                <option value="RESOLVED">🟢 RESOLVED (조치완료)</option>
+                                <option value="FALSE_POSITIVE">🟤 FALSE_POSITIVE (오탐)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="form-description">위협 상세 설명 (Description)</label>
+                        <textarea class="form-textarea" id="form-description" placeholder="위협 사례의 공격 방식, 피해 범위 등을 기술하세요."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">💾 위협 로그 기록</button>
+                </form>
+            </div>
+
+            <!-- Right Panel: Threat Log Archive Table -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">📁 위협 아카이브 로그 목록</h2>
+                    <span id="log-count-badge" class="badge badge-low" style="font-size: 0.8rem;">JOIN 연산 데이터</span>
+                </div>
+                <div class="toolbar" style="display: flex; gap: 0.5rem; margin-bottom: 1rem; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 0.5rem; background: rgba(255, 255, 255, 0.02); border-radius: 6px; border: 1px solid var(--border-color);">
+                    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                        <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">🔍 필터링:</span>
+                        <select class="form-select" id="filter-severity" onchange="applyFilters()" style="width: auto; padding: 0.4rem 0.8rem; margin: 0; font-size: 0.8rem; background: rgba(15, 23, 42, 0.6);">
+                            <option value="">전체 심각도</option>
+                            <option value="HIGH">🔴 HIGH (높음)</option>
+                            <option value="MEDIUM">🟡 MEDIUM (중간)</option>
+                            <option value="LOW">🟢 LOW (낮음)</option>
+                        </select>
+                        <select class="form-select" id="filter-category" onchange="applyFilters()" style="width: auto; padding: 0.4rem 0.8rem; margin: 0; font-size: 0.8rem; background: rgba(15, 23, 42, 0.6);">
+                            <option value="">전체 카테고리</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-secondary" onclick="exportToCsv()" style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.8rem; padding: 0.4rem 0.8rem; margin: 0;">
+                        📥 CSV 보고서 내보내기
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="threat-table">
+                        <thead>
+                            <tr>
+                                <th>카테고리</th>
+                                <th>위협 정보</th>
+                                <th>IP 평판</th>
+                                <th>심각도</th>
+                                <th>상태</th>
+                                <th>탐지 일시</th>
+                                <th id="th-actions">작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="log-table-body">
+                            <!-- Dynamically populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Management Modal -->
+    <div class="modal" id="category-modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 class="modal-title">📁 카테고리 관리</h3>
+                <button class="close-btn" onclick="closeCategoryModal()">&times;</button>
+            </div>
+            <div>
+                <!-- Add Category Sub-form -->
+                <form id="category-form" onsubmit="handleCategorySubmit(event)" style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color);">
+                    <div class="form-group">
+                        <label class="form-label" for="cat-name">카테고리 이름</label>
+                        <input class="form-input" type="text" id="cat-name" placeholder="예: SQL Injection" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cat-desc">카테고리 설명</label>
+                        <input class="form-input" type="text" id="cat-desc" placeholder="카테고리에 대한 짤막한 요약">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm">추가</button>
+                </form>
+                
+                <!-- Category List -->
+                <h4 style="margin-bottom: 0.75rem;">등록된 카테고리 목록</h4>
+                <div style="max-height: 250px; overflow-y: auto;">
+                    <table class="threat-table" style="font-size: 0.9rem;">
+                        <thead>
+                            <tr>
+                                <th>이름</th>
+                                <th>설명</th>
+                                <th>삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody id="category-list-body">
+                            <!-- Dynamically populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Log Update Modal -->
+    <div class="modal" id="edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">✏️ 위협 로그 수정</h3>
+                <button class="close-btn" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form id="edit-form" onsubmit="handleEditSubmit(event)">
+                <input type="hidden" id="edit-id">
+                <div class="form-group">
+                    <label class="form-label" for="edit-category">공격 분류 (Category)</label>
+                    <select class="form-select" id="edit-category" required>
+                        <!-- Dynamically populated -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="edit-name">위협 명칭 (Threat Name)</label>
+                    <input class="form-input" type="text" id="edit-name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="edit-severity">심각도 수준 (Severity)</label>
+                    <select class="form-select" id="edit-severity" required>
+                        <option value="HIGH">🔴 HIGH (높음)</option>
+                        <option value="MEDIUM">🟡 MEDIUM (중간)</option>
+                        <option value="LOW">🟢 LOW (낮음)</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+                    <div style="flex: 1;">
+                        <label class="form-label" for="edit-source-ip">출발지 IP</label>
+                        <input class="form-input" type="text" id="edit-source-ip">
+                    </div>
+                    <div style="flex: 1;">
+                        <label class="form-label" for="edit-dest-ip">목적지 IP</label>
+                        <input class="form-input" type="text" id="edit-dest-ip">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+                    <div style="flex: 1;">
+                        <label class="form-label" for="edit-port">포트 번호</label>
+                        <input class="form-input" type="number" id="edit-port" min="0" max="65535">
+                    </div>
+                    <div style="flex: 1;">
+                        <label class="form-label" for="edit-status">처리 상태</label>
+                        <select class="form-select" id="edit-status" required>
+                            <option value="DETECTED">🟣 DETECTED (탐지)</option>
+                            <option value="ANALYZING">🔵 ANALYZING (분석중)</option>
+                            <option value="RESOLVED">🟢 RESOLVED (조치완료)</option>
+                            <option value="FALSE_POSITIVE">🟤 FALSE_POSITIVE (오탐)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="edit-description">위협 상세 설명 (Description)</label>
+                    <textarea class="form-textarea" id="edit-description"></textarea>
+                </div>
+                <div class="form-group" id="edit-ai-rec-container" style="display: none; margin-bottom: 1.25rem;">
+                    <label class="form-label" style="display: flex; align-items: center; gap: 0.25rem; color: #818cf8;">
+                        🛡️ AI 권고 조치 방안 (Mitigation Playbook)
+                    </label>
+                    <div id="edit-ai-recommendation" style="background: rgba(11, 15, 25, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 1rem; color: #86efac; font-size: 0.85rem; line-height: 1.6; font-family: monospace; max-height: 200px; overflow-y: auto; white-space: pre-wrap; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">취소</button>
+                    <button type="submit" class="btn btn-primary">수정 완료</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal (Overlays page if not authenticated) -->
+    <div class="modal" id="login-modal" style="backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 10000;">
+        <div class="modal-content" style="max-width: 400px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(11, 15, 25, 0.95); box-shadow: 0 0 50px rgba(99, 102, 241, 0.25);">
+            <div class="modal-header" style="justify-content: center; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.5rem; font-weight: 700; color: #ffffff; text-align: center; letter-spacing: -0.03em;">
+                    🛡️ Security Threat Archive
+                </h2>
+            </div>
+            <form id="login-form" onsubmit="handleLoginSubmit(event)">
+                <div class="form-group">
+                    <label class="form-label" for="login-username">아이디 (Username)</label>
+                    <input class="form-input" type="text" id="login-username" placeholder="아이디 입력" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="login-password">비밀번호 (Password)</label>
+                    <input class="form-input" type="password" id="login-password" placeholder="비밀번호 입력" required>
+                </div>
+                <div id="login-error-msg" style="color: var(--severity-high); font-size: 0.85rem; margin-bottom: 1rem; text-align: center; display: none;">
+                    ❌ 아이디 또는 비밀번호가 올바르지 않습니다.
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1rem; padding: 0.85rem;">로그인</button>
+            </form>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); text-align: center; margin-top: 1.5rem; line-height: 1.5; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                <strong>테스트 계정 정보:</strong><br>
+                관리자 (카테고리/로그 CRUD): <code>admin</code> / <code>admin123</code><br>
+                분석가 (로그 CRUD): <code>analyst</code> / <code>analyst123</code><br>
+                일반 (조회 전용): <code>user</code> / <code>user123</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- Real-time Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

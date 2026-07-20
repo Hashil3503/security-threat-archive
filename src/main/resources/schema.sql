@@ -1,0 +1,37 @@
+DROP TABLE IF EXISTS threat_logs;
+DROP TABLE IF EXISTS threat_categories;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    role VARCHAR(20) NOT NULL,
+    logged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE threat_categories (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description VARCHAR(255),
+    logged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE threat_logs (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    category_id BIGINT NOT NULL,
+    threat_name VARCHAR(100) NOT NULL,
+    severity_level VARCHAR(20) NOT NULL,
+    description TEXT,
+    source_ip VARCHAR(45),
+    destination_ip VARCHAR(45),
+    port INT,
+    status VARCHAR(20) DEFAULT 'DETECTED',
+    abuse_score INT DEFAULT 0,
+    ai_recommendation TEXT,
+    logged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_threat_logs_category FOREIGN KEY (category_id) REFERENCES threat_categories(id) ON DELETE CASCADE
+);
