@@ -64,6 +64,8 @@ if "%USER_NGROK_PATH%"=="" (
 
 :RUN_NGROK
 echo.
+echo [안내] 기존에 혹시 실행 중일 수 있는 ngrok 프로세스를 먼저 정리합니다...
+taskkill /f /im ngrok.exe >nul 2>nul
 echo ngrok 터널링 (Port: 8082 to 외부 HTTPS) 을 시작합니다...
 echo 새로운 터미널 창에서 ngrok이 실행됩니다.
 start "ngrok Tunneling (Port 8082)" cmd /k ""%NGROK_PATH%" http 8082 --url https://grope-gauze-rockslide.ngrok-free.dev"
