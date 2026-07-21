@@ -14,7 +14,7 @@ public class JwtTokenProvider {
 
     // JWT 서명을 위한 비밀키 (최소 256비트 이상이어야 하므로 32바이트 이상 문자열 사용)
     private static final String JWT_SECRET = "securityarchive-jwt-secret-key-32bytes-for-hmac-sha-256";
-    private static final long JWT_EXPIRATION_MS = 3600000L; // 1시간 (밀리초 단위)
+    private static final long JWT_EXPIRATION_MS = 600000L; // 10분 (밀리초 단위)
 
     private final SecretKey key = Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
 

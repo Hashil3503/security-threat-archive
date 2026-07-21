@@ -21,6 +21,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-aop:3.4.1'
 	
 	// JJWT for Token-based Authentication (v0.12.5)
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
@@ -28,6 +29,11 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	
+	// Excel & PDF Reporting Libraries
+	implementation 'org.apache.poi:poi-ooxml:5.2.5'
+	implementation 'com.github.librepdf:openpdf:2.0.1'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

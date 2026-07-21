@@ -38,6 +38,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                // 슬라이딩 세션 만료: 매 API 요청 성공 시 만료시간이 10분 연장된 새 토큰을 응답 헤더에 노출
+                String newToken = tokenProvider.generateToken(authentication);
+                response.setHeader("X-New-Token", newToken);
+                response.setHeader("Access-Control-Expose-Headers", "X-New-Token");
             }
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);

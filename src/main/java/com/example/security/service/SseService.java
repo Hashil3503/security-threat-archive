@@ -65,4 +65,19 @@ public class SseService {
             }
         }
     }
+
+    /**
+     * 데이터베이스 초기화(리셋) 이벤트를 모든 클라이언트에게 실시간 전송합니다.
+     */
+    public void broadcastReset() {
+        for (SseEmitter emitter : emitters) {
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("THREAT_LOG_RESET")
+                        .data("RESET"));
+            } catch (IOException e) {
+                emitters.remove(emitter);
+            }
+        }
+    }
 }

@@ -50,4 +50,10 @@ public class ThreatLogController {
         logService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/reset")
+    public ResponseEntity<Void> resetLogs() {
+        logService.resetToDefaultLogs();
+        return ResponseEntity.ok().build();
+    }
 }

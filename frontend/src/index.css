@@ -295,6 +295,9 @@ header {
 /* Table styling */
 .table-container {
     border-radius: 12px;
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
 }
 
 .threat-table {

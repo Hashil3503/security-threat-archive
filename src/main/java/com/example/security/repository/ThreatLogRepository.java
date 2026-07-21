@@ -12,4 +12,6 @@ public interface ThreatLogRepository extends JpaRepository<ThreatLog, Long> {
     
     @Query("SELECT l FROM ThreatLog l JOIN FETCH l.threatCategory")
     List<ThreatLog> findAllWithCategory();
+
+    List<ThreatLog> findBySourceIp(String sourceIp);
 }

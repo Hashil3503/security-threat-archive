@@ -50,12 +50,16 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/api/auth/**", "/api/sse/connect").permitAll()
+                .requestMatchers("/", "/index.html", "/assets/**", "/css/**", "/js/**", "/api/auth/**", "/api/sse/connect", "/api/ingest/**", "/api/ingest/webhook", "/favicon.svg", "/icons.svg").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/logs/reset").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/logs").hasAnyRole("ANALYST", "ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/logs/**").hasAnyRole("ANALYST", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/logs/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/categories").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")
+                .requestMatchers("/api/reports/**").hasAnyRole("ANALYST", "ADMIN")
+                .requestMatchers("/api/audit-logs", "/api/audit-logs/**").hasRole("ADMIN")
+                .requestMatchers("/api/firewall/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             );
 
