@@ -41,7 +41,5 @@ src/main/resources/application.properties
 
 # Project design docs (Vibe Coding logs)
 프로젝트 개요.txt
-step1_database_and_model_design.md
-step2_security_and_sse_design.md
-step3_ai_and_intel_design.md
-security_threat_archive_enhancement_ideas.md
+project-docs/
+
