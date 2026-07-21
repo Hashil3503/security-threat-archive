@@ -143,6 +143,38 @@ gemini.api.key=본인의_Google_Gemini_API_키
 ```
 브라우저를 열어 **`http://localhost:8082`**에 접속합니다.
 
+### 5. 일괄 실행 및 외부 연동 스크립트 (`run-dashboard.bat` & `ngrok`)
+
+로컬 환경에서의 빠른 서버 구동 및 외부 모바일/외부 디바이스 연동 테스트를 위해, MariaDB 상태 점검, Spring Boot 서버 실행, 그리고 **ngrok** 터널링을 한 번에 실행해 주는 윈도우 배치 스크립트(`run-dashboard.bat`)를 제공합니다.
+
+#### 1) 주요 기능
+* **DB 연결 자동 확인**: MariaDB가 `3306` 포트에서 실행 중인지 사전에 진단합니다.
+* **Spring Boot 자동 실행**: 별도 터미널 창을 열어 `gradlew.bat bootRun`을 실행하여 백엔드 서버(포트 `8082`)를 실행합니다.
+* **ngrok 터널링 자동화**: 외부에서도 접근이 가능하도록 로컬 `8082` 포트를 ngrok 고정 도메인(`https://grope-gauze-rockslide.ngrok-free.dev`)으로 자동 포워딩합니다.
+
+#### 2) ngrok 사전 준비 사항
+ngrok 외부 연동을 정상적으로 사용하려면 아래 설정이 선행되어야 합니다.
+1. [ngrok 공식 홈페이지](https://ngrok.com)에 회원가입 및 다운로드
+2. 다운로드한 `ngrok.exe` 파일을 다음 중 한 곳에 배치합니다:
+   * **시스템 환경 변수 (PATH)** 등록
+   * `C:\ngrok\ngrok.exe` 경로에 배치
+   * 프로젝트 루트 폴더(`.\ngrok.exe`)에 배치
+3. 가입 후 발급받은 본인의 인증 토큰을 등록합니다:
+   ```cmd
+   C:\ngrok\ngrok.exe config add-authtoken [본인의_인증_토큰]
+   ```
+
+#### 3) 사용 방법
+1. 데이터베이스(`security_db`) 구동 확인 및 `application.properties` 설정 완료.
+2. 프로젝트 루트 폴더에 위치한 `run-dashboard.bat` 파일을 더블 클릭하거나 명령 프롬프트(CMD)에서 실행합니다.
+   ```cmd
+   .\run-dashboard.bat
+   ```
+3. 스크립트 내에서 `ngrok.exe` 경로가 감지되지 않을 경우, 수동 경로 입력을 받거나 설치 안내가 표시됩니다.
+4. 실행 완료 후, 다음 주소들을 통해 서비스에 접속할 수 있습니다:
+   * **로컬 접속**: `http://localhost:8082`
+   * **외부/도메인 접속**: `https://grope-gauze-rockslide.ngrok-free.dev` (ngrok 터널링 주소)
+
 ---
 
 ## 🔒 테스트용 시드 계정 정보
