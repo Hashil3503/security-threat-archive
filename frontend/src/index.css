@@ -52,9 +52,15 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
     margin-bottom: 2.5rem;
     padding-bottom: 1.5rem;
     border-bottom: 1px solid var(--border-color);
+}
+
+.brand-section {
+    flex-shrink: 0;
 }
 
 .brand-section h1 {
@@ -613,9 +619,9 @@ header {
 }
 
 /* ==========================================
-   📱 모바일 디바이스 최적화 미디어 쿼리 (under 768px)
+   📱 모바일 및 반응형 디바이스 최적화 미디어 쿼리 (under 900px)
    ========================================== */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     /* 1. 컨테이너 여백 축소 및 가용 너비 확보 */
     .app-container {
         width: 100%;
@@ -625,7 +631,8 @@ header {
     /* 2. 헤더 수직 정렬로 변환 */
     header {
         flex-direction: column;
-        gap: 1rem;
+        align-items: center;
+        gap: 1.25rem;
         text-align: center;
         margin-bottom: 1.5rem;
         padding-bottom: 1rem;
@@ -634,6 +641,12 @@ header {
     .brand-section h1 {
         justify-content: center;
         font-size: 1.8rem;
+    }
+
+    /* Align right user block to center on vertical stack */
+    header > div:nth-child(2) {
+        align-items: center !important;
+        width: 100%;
     }
 
     .user-actions {

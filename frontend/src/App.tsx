@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo, type FormEvent } from 'react';
 import type { ThreatCategory, ThreatLog, ToastMessage } from './types';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import ScrambleText from './components/ScrambleText';
+import DashboardCarousel from './components/DashboardCarousel';
 
 
 
@@ -755,8 +757,14 @@ export default function App() {
             <div className="modal active" style={{ backdropFilter: "blur(25px)", WebkitBackdropFilter: "blur(25px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", position: "fixed", top: 0, left: 0, width: "100%", height: "100%" }}>
                 <div className="modal-content" style={{ maxWidth: "400px", border: "1px solid rgba(255, 255, 255, 0.15)", background: "rgba(11, 15, 25, 0.95)", boxShadow: "0 0 50px rgba(99, 102, 241, 0.25)", padding: "2rem" }}>
                     <div className="modal-header" style={{ justifyContent: "center", marginBottom: "1.5rem" }}>
-                        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#ffffff", textAlign: "center", letterSpacing: "-0.03em" }}>
-                            🛡️ Security Threat Archive
+                        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#ffffff", textAlign: "center", letterSpacing: "-0.03em", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", flexWrap: "nowrap", whiteSpace: "nowrap" }}>
+                            <span>🛡️</span>
+                            <ScrambleText
+                                words="Security Threat Archive"
+                                color="#ffffff"
+                                scrambleDuration={1400}
+                                autoStart={true}
+                            />
                         </h2>
                     </div>
                     <form onSubmit={handleLogin}>
@@ -791,7 +799,15 @@ export default function App() {
             {/* Header */}
             <header>
                 <div className="brand-section">
-                    <h1>🛡️ Security Threat Archive</h1>
+                    <h1>
+                        <span>🛡️</span>
+                        <ScrambleText
+                            words="Security Threat Archive"
+                            color="#ffffff"
+                            scrambleDuration={1400}
+                            autoStart={true}
+                        />
+                    </h1>
                     <p>네트워크 위협 정보 및 보안 사고 기록 분석 플랫폼</p>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.4rem" }}>
@@ -815,91 +831,207 @@ export default function App() {
                 </div>
             </header>
 
-            {/* Stats Grid */}
-            <div className="stats-grid">
-                <div className="stat-card" id="stat-total">
-                    <span className="stat-title">전체 위협 로그</span>
-                    <span className="stat-value">{totalCount}</span>
-                    <span className="stat-desc">시스템에 등록된 전체 보안 사고 수</span>
-                </div>
-                <div className="stat-card high-severity" id="stat-high">
-                    <span className="stat-title">심각도: HIGH</span>
-                    <span className="stat-value">{highCount}</span>
-                    <span className="stat-desc">즉각적인 조치가 필요한 심각한 위협</span>
-                </div>
-                <div className="stat-card medium-severity" id="stat-medium">
-                    <span className="stat-title">심각도: MEDIUM</span>
-                    <span className="stat-value">{mediumCount}</span>
-                    <span className="stat-desc">지속적인 모니터링이 요구되는 위험</span>
-                </div>
-                <div className="stat-card low-severity" id="stat-low">
-                    <span className="stat-title">심각도: LOW</span>
-                    <span className="stat-value">{lowCount}</span>
-                    <span className="stat-desc">일반 정보 보안 침해 및 단순 경고</span>
-                </div>
-            </div>
-
-            {/* Charts Grid */}
-            <div className="charts-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem", marginBottom: "1.5rem" }}>
-                <div className="panel" style={{ height: "320px", padding: "1.5rem", display: "flex", flexDirection: "column" }}>
-                    <h3 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "1rem", color: "var(--text-primary)" }}>📊 위협 카테고리 분포</h3>
-                    <div style={{ flex: 1, minHeight: 0 }}>
-                        {categoryChartData.length === 0 ? (
-                            <div style={{ display: "flex", height: "100%", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)", fontSize: "0.85rem" }}>
-                                데이터가 없습니다.
-                            </div>
-                        ) : (
-                            <ResponsiveContainer width="100%" height="100%">
-                                <PieChart>
-                                    <Pie
-                                        data={categoryChartData}
-                                        cx="50%"
-                                        cy="50%"
-                                        innerRadius={55}
-                                        outerRadius={75}
-                                        paddingAngle={5}
-                                        dataKey="value"
-                                    >
-                                        {categoryChartData.map((_entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip
-                                        contentStyle={{ backgroundColor: "#0f172a", borderColor: "rgba(255, 255, 255, 0.1)", borderRadius: "8px", color: "#fff", fontSize: "0.8rem" }}
-                                    />
-                                    <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: "0.75rem" }} />
-                                </PieChart>
-                            </ResponsiveContainer>
-                        )}
-                    </div>
-                </div>
-                <div className="panel" style={{ height: "320px", padding: "1.5rem", display: "flex", flexDirection: "column" }}>
-                    <h3 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "1rem", color: "var(--text-primary)" }}>📈 위협 심각도 현황</h3>
-                    <div style={{ flex: 1, minHeight: 0 }}>
-                        {totalCount === 0 ? (
-                            <div style={{ display: "flex", height: "100%", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)", fontSize: "0.85rem" }}>
-                                데이터가 없습니다.
-                            </div>
-                        ) : (
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={severityChartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.05)" />
-                                    <XAxis dataKey="name" stroke="var(--text-secondary)" fontSize={11} tickLine={false} />
-                                    <YAxis stroke="var(--text-secondary)" fontSize={11} tickLine={false} allowDecimals={false} />
-                                    <Tooltip
-                                        cursor={{ fill: "rgba(255, 255, 255, 0.02)" }}
-                                        contentStyle={{ backgroundColor: "#0f172a", borderColor: "rgba(255, 255, 255, 0.1)", borderRadius: "8px", color: "#fff", fontSize: "0.8rem" }}
-                                    />
-                                    <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={40}>
-                                        {severityChartData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.fill} />
-                                        ))}
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
-                        )}
-                    </div>
-                </div>
+            {/* Dashboard Carousel Summary */}
+            <div style={{ marginBottom: "2.5rem", width: "100%" }}>
+                <DashboardCarousel
+                    initialIndex={1}
+                    items={[
+                        {
+                            id: "all",
+                            label: "🛡️ 전체 지표 한눈에 보기",
+                            icon: "🌐",
+                            content: (
+                                <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", width: "100%" }}>
+                                    <div className="stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", marginBottom: 0, width: "100%" }}>
+                                        <div className="stat-card" id="stat-total">
+                                            <span className="stat-title">전체 위협 로그</span>
+                                            <span className="stat-value">{totalCount}</span>
+                                            <span className="stat-desc">시스템에 등록된 전체 보안 사고 수</span>
+                                        </div>
+                                        <div className="stat-card high-severity" id="stat-high">
+                                            <span className="stat-title">심각도: HIGH</span>
+                                            <span className="stat-value">{highCount}</span>
+                                            <span className="stat-desc">즉각적인 조치가 필요한 심각한 위협</span>
+                                        </div>
+                                        <div className="stat-card medium-severity" id="stat-medium">
+                                            <span className="stat-title">심각도: MEDIUM</span>
+                                            <span className="stat-value">{mediumCount}</span>
+                                            <span className="stat-desc">지속적인 모니터링이 요구되는 위험</span>
+                                        </div>
+                                        <div className="stat-card low-severity" id="stat-low">
+                                            <span className="stat-title">심각도: LOW</span>
+                                            <span className="stat-value">{lowCount}</span>
+                                            <span className="stat-desc">일반 정보 보안 침해 및 단순 경고</span>
+                                        </div>
+                                    </div>
+                                    <div className="charts-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem", marginBottom: 0 }}>
+                                        <div className="panel" style={{ height: "300px", padding: "1.25rem", display: "flex", flexDirection: "column" }}>
+                                            <h3 style={{ fontSize: "0.9rem", fontWeight: 600, marginBottom: "0.75rem", color: "var(--text-primary)" }}>📊 위협 카테고리 분포</h3>
+                                            <div style={{ flex: 1, minHeight: 0 }}>
+                                                {categoryChartData.length === 0 ? (
+                                                    <div style={{ display: "flex", height: "100%", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)", fontSize: "0.85rem" }}>
+                                                        데이터가 없습니다.
+                                                    </div>
+                                                ) : (
+                                                    <ResponsiveContainer width="100%" height="100%">
+                                                        <PieChart>
+                                                            <Pie
+                                                                data={categoryChartData}
+                                                                cx="50%"
+                                                                cy="50%"
+                                                                innerRadius={45}
+                                                                outerRadius={65}
+                                                                paddingAngle={5}
+                                                                dataKey="value"
+                                                            >
+                                                                {categoryChartData.map((_entry, index) => (
+                                                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                                                ))}
+                                                            </Pie>
+                                                            <Tooltip
+                                                                contentStyle={{ backgroundColor: "#0f172a", borderColor: "rgba(255, 255, 255, 0.1)", borderRadius: "8px", color: "#fff", fontSize: "0.8rem" }}
+                                                            />
+                                                            <Legend verticalAlign="bottom" height={28} iconType="circle" wrapperStyle={{ fontSize: "0.75rem" }} />
+                                                        </PieChart>
+                                                    </ResponsiveContainer>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="panel" style={{ height: "300px", padding: "1.25rem", display: "flex", flexDirection: "column" }}>
+                                            <h3 style={{ fontSize: "0.9rem", fontWeight: 600, marginBottom: "0.75rem", color: "var(--text-primary)" }}>📈 위협 심각도 현황</h3>
+                                            <div style={{ flex: 1, minHeight: 0 }}>
+                                                {totalCount === 0 ? (
+                                                    <div style={{ display: "flex", height: "100%", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)", fontSize: "0.85rem" }}>
+                                                        데이터가 없습니다.
+                                                    </div>
+                                                ) : (
+                                                    <ResponsiveContainer width="100%" height="100%">
+                                                        <BarChart data={severityChartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                                                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.05)" />
+                                                            <XAxis dataKey="name" stroke="var(--text-secondary)" fontSize={10} tickLine={false} />
+                                                            <YAxis stroke="var(--text-secondary)" fontSize={10} tickLine={false} allowDecimals={false} />
+                                                            <Tooltip
+                                                                cursor={{ fill: "rgba(255, 255, 255, 0.02)" }}
+                                                                contentStyle={{ backgroundColor: "#0f172a", borderColor: "rgba(255, 255, 255, 0.1)", borderRadius: "8px", color: "#fff", fontSize: "0.8rem" }}
+                                                            />
+                                                            <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={30}>
+                                                                {severityChartData.map((entry, index) => (
+                                                                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                                                                ))}
+                                                            </Bar>
+                                                        </BarChart>
+                                                    </ResponsiveContainer>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        },
+                        {
+                            id: "stats",
+                            label: "🛡️ 전체 위협 지표 요약",
+                            icon: "📊",
+                            content: (
+                                <div className="stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1.25rem", marginBottom: 0, maxWidth: "680px", margin: "0 auto" }}>
+                                    <div className="stat-card" id="stat-total">
+                                        <span className="stat-title">전체 위협 로그</span>
+                                        <span className="stat-value">{totalCount}</span>
+                                        <span className="stat-desc">시스템에 등록된 전체 보안 사고 수</span>
+                                    </div>
+                                    <div className="stat-card high-severity" id="stat-high">
+                                        <span className="stat-title">심각도: HIGH</span>
+                                        <span className="stat-value">{highCount}</span>
+                                        <span className="stat-desc">즉각적인 조치가 필요한 심각한 위협</span>
+                                    </div>
+                                    <div className="stat-card medium-severity" id="stat-medium">
+                                        <span className="stat-title">심각도: MEDIUM</span>
+                                        <span className="stat-value">{mediumCount}</span>
+                                        <span className="stat-desc">지속적인 모니터링이 요구되는 위험</span>
+                                    </div>
+                                    <div className="stat-card low-severity" id="stat-low">
+                                        <span className="stat-title">심각도: LOW</span>
+                                        <span className="stat-value">{lowCount}</span>
+                                        <span className="stat-desc">일반 정보 보안 침해 및 단순 경고</span>
+                                    </div>
+                                </div>
+                            )
+                        },
+                        {
+                            id: "category",
+                            label: "🛡️ 위협 카테고리 분포",
+                            icon: "📁",
+                            content: (
+                                <div className="panel" style={{ height: "320px", padding: "1.5rem", display: "flex", flexDirection: "column", maxWidth: "600px", margin: "0 auto" }}>
+                                    <h3 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "1rem", color: "var(--text-primary)" }}>📊 위협 카테고리 분포</h3>
+                                    <div style={{ flex: 1, minHeight: 0 }}>
+                                        {categoryChartData.length === 0 ? (
+                                            <div style={{ display: "flex", height: "100%", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)", fontSize: "0.85rem" }}>
+                                                데이터가 없습니다.
+                                            </div>
+                                        ) : (
+                                            <ResponsiveContainer width="100%" height="100%">
+                                                <PieChart>
+                                                    <Pie
+                                                        data={categoryChartData}
+                                                        cx="50%"
+                                                        cy="50%"
+                                                        innerRadius={55}
+                                                        outerRadius={75}
+                                                        paddingAngle={5}
+                                                        dataKey="value"
+                                                    >
+                                                        {categoryChartData.map((_entry, index) => (
+                                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                                        ))}
+                                                    </Pie>
+                                                    <Tooltip
+                                                        contentStyle={{ backgroundColor: "#0f172a", borderColor: "rgba(255, 255, 255, 0.1)", borderRadius: "8px", color: "#fff", fontSize: "0.8rem" }}
+                                                    />
+                                                    <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: "0.75rem" }} />
+                                                </PieChart>
+                                            </ResponsiveContainer>
+                                        )}
+                                    </div>
+                                </div>
+                            )
+                        },
+                        {
+                            id: "severity",
+                            label: "🛡️ 위협 심각도 현황",
+                            icon: "📈",
+                            content: (
+                                <div className="panel" style={{ height: "320px", padding: "1.5rem", display: "flex", flexDirection: "column", maxWidth: "600px", margin: "0 auto" }}>
+                                    <h3 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "1rem", color: "var(--text-primary)" }}>📈 위협 심각도 현황</h3>
+                                    <div style={{ flex: 1, minHeight: 0 }}>
+                                        {totalCount === 0 ? (
+                                            <div style={{ display: "flex", height: "100%", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)", fontSize: "0.85rem" }}>
+                                                데이터가 없습니다.
+                                            </div>
+                                        ) : (
+                                            <ResponsiveContainer width="100%" height="100%">
+                                                <BarChart data={severityChartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                                                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.05)" />
+                                                    <XAxis dataKey="name" stroke="var(--text-secondary)" fontSize={11} tickLine={false} />
+                                                    <YAxis stroke="var(--text-secondary)" fontSize={11} tickLine={false} allowDecimals={false} />
+                                                    <Tooltip
+                                                        cursor={{ fill: "rgba(255, 255, 255, 0.02)" }}
+                                                        contentStyle={{ backgroundColor: "#0f172a", borderColor: "rgba(255, 255, 255, 0.1)", borderRadius: "8px", color: "#fff", fontSize: "0.8rem" }}
+                                                    />
+                                                    <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={40}>
+                                                        {severityChartData.map((entry, index) => (
+                                                            <Cell key={`cell-${index}`} fill={entry.fill} />
+                                                        ))}
+                                                    </Bar>
+                                                </BarChart>
+                                            </ResponsiveContainer>
+                                        )}
+                                    </div>
+                                </div>
+                            )
+                        }
+                    ]}
+                />
             </div>
 
             {/* Dashboard Body */}

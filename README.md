@@ -12,6 +12,7 @@
 
 ## 🖥️ 서비스 미리보기 & UI 레이아웃
 
+* **인터랙티브 대시보드 요약 캐러셀 (Dashboard Carousel)**: Framer Motion 물리 애니메이션과 아크 궤적 알고리즘을 이식한 스위처를 통해 **전체보기(🌐), 지표 요약(📊), 카테고리(📁), 심각도(📈)** 통계 화면을 유연한 슬라이드 및 동적 높이 밸런스(Auto height)로 전환하며 조회.
 * **대시보드 통계 & 인터랙티브 차트**: Recharts를 활용해 전체 위협 수준, 실시간 등급별/카테고리별 통계 및 공격 추이 시각화.
 * **아코디언 드롭다운 상세 보기**: 각 로그 항목 클릭 시 테이블 내에서 슬라이드 오픈되며 **상세 기술 분석 내용**, **AbuseIPDB 악성도 점수**, 및 **AI 대응 가이드** 출력.
 * **SOAR 원클릭 차단**: 상세 보기 내 'IP 차단' 버튼 클릭 시, 해당 IP를 방화벽 차단 목록(`blocked_ips`)에 등록하고 해당 IP의 위협 로그 상태를 `BLOCKED`로 일괄 변경.
@@ -40,7 +41,9 @@
 * **Styling**: Vanilla CSS (CSS Variables, Glassmorphism, Responsive Grid System)
 * **Real-time Pipeline**: EventSource (Server-Sent Events)
 * **Interceptors**: Native Fetch API Interceptor (JWT Token Auto-Inject & 401 Authentication Handler)
-* **Libraries**: Recharts (인터랙티브 대시보드 차트)
+* **Libraries**: 
+  * Recharts (인터랙티브 대시보드 차트)
+  * Framer Motion (물리 기반 슬라이딩 대시보드 캐러셀)
 * **Linter**: oxlint (초고속 코드 린팅)
 
 ### AI & Threat Intelligence API
