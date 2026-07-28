@@ -1,5 +1,7 @@
 package com.example.security.controller;
 
+import lombok.RequiredArgsConstructor;
+
 import com.example.security.dto.LoginRequest;
 import com.example.security.dto.LoginResponse;
 import com.example.security.security.JwtTokenProvider;
@@ -13,15 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
-
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
-        this.authenticationManager = authenticationManager;
-        this.tokenProvider = tokenProvider;
-    }
 
     /**
      * username과 password 기반으로 사용자를 인증하고 JWT 토큰을 반환합니다.

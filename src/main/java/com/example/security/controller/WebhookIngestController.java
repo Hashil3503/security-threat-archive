@@ -1,5 +1,7 @@
 package com.example.security.controller;
 
+import lombok.RequiredArgsConstructor;
+
 import com.example.security.dto.WebhookLogPayload;
 import com.example.security.repository.BlockedIpRepository;
 import com.example.security.service.ThreatLogService;
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/ingest")
+@RequiredArgsConstructor
 public class WebhookIngestController {
 
     private final ThreatLogService threatLogService;
@@ -20,12 +23,6 @@ public class WebhookIngestController {
 
     @Value("${webhook.token:securityarchive-secret-webhook-token}")
     private String configuredToken;
-
-    public WebhookIngestController(ThreatLogService threatLogService,
-                                   BlockedIpRepository blockedIpRepository) {
-        this.threatLogService = threatLogService;
-        this.blockedIpRepository = blockedIpRepository;
-    }
 
     @PostMapping("/webhook")
     public ResponseEntity<String> ingestWebhook(

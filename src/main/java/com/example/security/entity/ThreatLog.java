@@ -1,9 +1,16 @@
 package com.example.security.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "threat_logs")
+@Getter
+@Setter
+@ToString
 public class ThreatLog extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,84 +43,4 @@ public class ThreatLog extends BaseEntity {
 
     @Column(name = "ai_recommendation", columnDefinition = "TEXT")
     private String aiRecommendation;
-
-    public ThreatCategory getThreatCategory() {
-        return threatCategory;
-    }
-
-    public void setThreatCategory(ThreatCategory threatCategory) {
-        this.threatCategory = threatCategory;
-    }
-
-    public String getThreatName() {
-        return threatName;
-    }
-
-    public void setThreatName(String threatName) {
-        this.threatName = threatName;
-    }
-
-    public String getSeverityLevel() {
-        return severityLevel;
-    }
-
-    public void setSeverityLevel(String severityLevel) {
-        this.severityLevel = severityLevel;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getSourceIp() {
-        return sourceIp;
-    }
-
-    public void setSourceIp(String sourceIp) {
-        this.sourceIp = sourceIp;
-    }
-
-    public String getDestinationIp() {
-        return destinationIp;
-    }
-
-    public void setDestinationIp(String destinationIp) {
-        this.destinationIp = destinationIp;
-    }
-
-    public Integer getPort() {
-        return port;
-    }
-
-    public void setPort(Integer port) {
-        this.port = port;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Integer getAbuseScore() {
-        return abuseScore;
-    }
-
-    public void setAbuseScore(Integer abuseScore) {
-        this.abuseScore = abuseScore;
-    }
-
-    public String getAiRecommendation() {
-        return aiRecommendation;
-    }
-
-    public void setAiRecommendation(String aiRecommendation) {
-        this.aiRecommendation = aiRecommendation;
-    }
 }

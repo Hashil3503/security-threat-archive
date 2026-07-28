@@ -1,10 +1,17 @@
 package com.example.security.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import com.example.security.entity.ThreatCategory;
 import com.example.security.entity.ThreatLog;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@ToString
 public class ThreatLogDto {
     private Long id;
     private Long categoryId;
@@ -60,31 +67,4 @@ public class ThreatLogDto {
         log.setLoggedAt(this.loggedAt);
         return log;
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Long getCategoryId() { return categoryId; }
-    public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
-    public String getCategoryName() { return categoryName; }
-    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
-    public String getThreatName() { return threatName; }
-    public void setThreatName(String threatName) { this.threatName = threatName; }
-    public String getSeverityLevel() { return severityLevel; }
-    public void setSeverityLevel(String severityLevel) { this.severityLevel = severityLevel; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public String getSourceIp() { return sourceIp; }
-    public void setSourceIp(String sourceIp) { this.sourceIp = sourceIp; }
-    public String getDestinationIp() { return destinationIp; }
-    public void setDestinationIp(String destinationIp) { this.destinationIp = destinationIp; }
-    public Integer getPort() { return port; }
-    public void setPort(Integer port) { this.port = port; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-    public Integer getAbuseScore() { return abuseScore; }
-    public void setAbuseScore(Integer abuseScore) { this.abuseScore = abuseScore; }
-    public String getAiRecommendation() { return aiRecommendation; }
-    public void setAiRecommendation(String aiRecommendation) { this.aiRecommendation = aiRecommendation; }
-    public LocalDateTime getLoggedAt() { return loggedAt; }
-    public void setLoggedAt(LocalDateTime loggedAt) { this.loggedAt = loggedAt; }
 }

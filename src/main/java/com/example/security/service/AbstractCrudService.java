@@ -8,11 +8,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public abstract class AbstractCrudService<T, ID> implements CrudService<T, ID> {
 
-    protected final JpaRepository<T, ID> repository;
-
-    protected AbstractCrudService(JpaRepository<T, ID> repository) {
-        this.repository = repository;
-    }
+    @org.springframework.beans.factory.annotation.Autowired
+    protected JpaRepository<T, ID> repository;
 
     @Override
     public List<T> findAll() {

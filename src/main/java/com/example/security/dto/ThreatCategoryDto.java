@@ -1,7 +1,14 @@
 package com.example.security.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import com.example.security.entity.ThreatCategory;
 
+@Getter
+@Setter
+@ToString
 public class ThreatCategoryDto {
     private Long id;
     private String name;
@@ -22,11 +29,4 @@ public class ThreatCategoryDto {
         category.setDescription(this.description);
         return category;
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
 }

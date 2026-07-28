@@ -1,5 +1,7 @@
 package com.example.security.service;
 
+import lombok.RequiredArgsConstructor;
+
 import com.example.security.entity.ThreatCategory;
 import com.example.security.entity.ThreatLog;
 import com.example.security.entity.User;
@@ -11,19 +13,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@RequiredArgsConstructor
 public class DatabaseInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final ThreatCategoryRepository threatCategoryRepository;
     private final ThreatLogRepository threatLogRepository;
-
-    public DatabaseInitializer(UserRepository userRepository,
-                               ThreatCategoryRepository threatCategoryRepository,
-                               ThreatLogRepository threatLogRepository) {
-        this.userRepository = userRepository;
-        this.threatCategoryRepository = threatCategoryRepository;
-        this.threatLogRepository = threatLogRepository;
-    }
 
     @Override
     @Transactional

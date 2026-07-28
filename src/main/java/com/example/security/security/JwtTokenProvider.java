@@ -1,5 +1,7 @@
 package com.example.security.security;
 
+import lombok.RequiredArgsConstructor;
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
@@ -10,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenProvider {
 
     // JWT 서명을 위한 비밀키 (최소 256비트 이상이어야 하므로 32바이트 이상 문자열 사용)

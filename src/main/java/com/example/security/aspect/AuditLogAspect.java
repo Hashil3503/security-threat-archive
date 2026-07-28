@@ -1,5 +1,7 @@
 package com.example.security.aspect;
 
+import lombok.RequiredArgsConstructor;
+
 import com.example.security.dto.LoginRequest;
 import com.example.security.dto.ThreatCategoryDto;
 import com.example.security.dto.ThreatLogDto;
@@ -21,13 +23,10 @@ import java.time.LocalDateTime;
 
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class AuditLogAspect {
 
     private final AuditLogRepository auditLogRepository;
-
-    public AuditLogAspect(AuditLogRepository auditLogRepository) {
-        this.auditLogRepository = auditLogRepository;
-    }
 
     private String getClientIp() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

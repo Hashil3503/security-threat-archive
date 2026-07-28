@@ -1,5 +1,7 @@
 package com.example.security.service;
 
+import lombok.RequiredArgsConstructor;
+
 import com.example.security.entity.ThreatLog;
 import com.example.security.repository.ThreatLogRepository;
 import com.lowagie.text.Document;
@@ -32,14 +34,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ReportService {
 
     private final ThreatLogRepository threatLogRepository;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-    public ReportService(ThreatLogRepository threatLogRepository) {
-        this.threatLogRepository = threatLogRepository;
-    }
 
     /**
      * 전체 위협 로그 데이터를 스타일이 가미된 Excel 파일로 생성합니다.

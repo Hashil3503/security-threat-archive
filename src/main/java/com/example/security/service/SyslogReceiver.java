@@ -1,7 +1,9 @@
 package com.example.security.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
@@ -12,9 +14,9 @@ import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 
 @Component
+@Slf4j
+@RequiredArgsConstructor
 public class SyslogReceiver implements SmartLifecycle {
-
-    private static final Logger log = LoggerFactory.getLogger(SyslogReceiver.class);
 
     private final ThreatLogService threatLogService;
     
@@ -27,10 +29,6 @@ public class SyslogReceiver implements SmartLifecycle {
     private DatagramSocket socket;
     private Thread receiverThread;
     private volatile boolean running = false;
-
-    public SyslogReceiver(ThreatLogService threatLogService) {
-        this.threatLogService = threatLogService;
-    }
 
     @Override
     public void start() {

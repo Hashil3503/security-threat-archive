@@ -9,10 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ThreatCategoryService extends AbstractCrudService<ThreatCategory, Long> {
 
-    public ThreatCategoryService(ThreatCategoryRepository repository) {
-        super(repository);
-    }
-
     @Override
     @Transactional
     public ThreatCategory update(Long id, ThreatCategory entity) {

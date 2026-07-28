@@ -1,5 +1,7 @@
 package com.example.security.controller;
 
+import lombok.RequiredArgsConstructor;
+
 import com.example.security.dto.ThreatLogDto;
 import com.example.security.entity.ThreatLog;
 import com.example.security.service.ThreatLogService;
@@ -11,13 +13,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/logs")
+@RequiredArgsConstructor
 public class ThreatLogController {
 
     private final ThreatLogService logService;
-
-    public ThreatLogController(ThreatLogService logService) {
-        this.logService = logService;
-    }
 
     @GetMapping
     public ResponseEntity<List<ThreatLogDto>> getAllLogs() {

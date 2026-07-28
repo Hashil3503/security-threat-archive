@@ -1,5 +1,7 @@
 package com.example.security.controller;
 
+import lombok.RequiredArgsConstructor;
+
 import com.example.security.entity.BlockedIp;
 import com.example.security.repository.BlockedIpRepository;
 import com.example.security.repository.ThreatLogRepository;
@@ -12,16 +14,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/firewall")
+@RequiredArgsConstructor
 public class BlockedIpController {
 
     private final BlockedIpRepository blockedIpRepository;
     private final ThreatLogRepository threatLogRepository;
-
-    public BlockedIpController(BlockedIpRepository blockedIpRepository,
-                               ThreatLogRepository threatLogRepository) {
-        this.blockedIpRepository = blockedIpRepository;
-        this.threatLogRepository = threatLogRepository;
-    }
 
     /**
      * 차단된 IP 전체 목록 반환 (최신순)

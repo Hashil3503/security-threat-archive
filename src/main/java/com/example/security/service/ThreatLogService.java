@@ -13,6 +13,8 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
+@lombok.extern.slf4j.Slf4j
+@lombok.RequiredArgsConstructor
 public class ThreatLogService extends AbstractCrudService<ThreatLog, Long> {
 
     private final ThreatLogRepository threatLogRepository;
@@ -21,21 +23,6 @@ public class ThreatLogService extends AbstractCrudService<ThreatLog, Long> {
     private final ThreatIntelligenceService threatIntelligenceService;
     private final GeminiAnalysisService geminiAnalysisService;
     private final BlockedIpRepository blockedIpRepository;
-
-    public ThreatLogService(ThreatLogRepository threatLogRepository, 
-                            ThreatCategoryRepository threatCategoryRepository,
-                            SseService sseService,
-                            ThreatIntelligenceService threatIntelligenceService,
-                            GeminiAnalysisService geminiAnalysisService,
-                            BlockedIpRepository blockedIpRepository) {
-        super(threatLogRepository);
-        this.threatLogRepository = threatLogRepository;
-        this.threatCategoryRepository = threatCategoryRepository;
-        this.sseService = sseService;
-        this.threatIntelligenceService = threatIntelligenceService;
-        this.geminiAnalysisService = geminiAnalysisService;
-        this.blockedIpRepository = blockedIpRepository;
-    }
 
     /**
      * N+1 문제를 방지하기 위해 Fetch Join을 사용하도록 findAll() 메서드를 오버라이딩합니다.

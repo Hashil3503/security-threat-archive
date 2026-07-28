@@ -1,5 +1,7 @@
 package com.example.security.controller;
 
+import lombok.RequiredArgsConstructor;
+
 import com.example.security.entity.AuditLog;
 import com.example.security.repository.AuditLogRepository;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +13,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/audit-logs")
+@RequiredArgsConstructor
 public class AuditLogController {
 
     private final AuditLogRepository auditLogRepository;
-
-    public AuditLogController(AuditLogRepository auditLogRepository) {
-        this.auditLogRepository = auditLogRepository;
-    }
 
     /**
      * 모든 감사 로그를 최신순으로 정렬하여 반환합니다.

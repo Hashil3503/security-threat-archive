@@ -1,5 +1,7 @@
 package com.example.security.config;
 
+import lombok.RequiredArgsConstructor;
+
 import com.example.security.security.CustomUserDetailsService;
 import com.example.security.security.JwtAuthenticationFilter;
 import com.example.security.security.JwtTokenProvider;
@@ -19,15 +21,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtTokenProvider tokenProvider;
     private final CustomUserDetailsService customUserDetailsService;
-
-    public SecurityConfig(JwtTokenProvider tokenProvider, CustomUserDetailsService customUserDetailsService) {
-        this.tokenProvider = tokenProvider;
-        this.customUserDetailsService = customUserDetailsService;
-    }
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {

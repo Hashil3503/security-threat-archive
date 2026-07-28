@@ -1,5 +1,7 @@
 package com.example.security.controller;
 
+import lombok.RequiredArgsConstructor;
+
 import com.example.security.dto.ThreatCategoryDto;
 import com.example.security.entity.ThreatCategory;
 import com.example.security.service.ThreatCategoryService;
@@ -11,13 +13,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/categories")
+@RequiredArgsConstructor
 public class ThreatCategoryController {
 
     private final ThreatCategoryService categoryService;
-
-    public ThreatCategoryController(ThreatCategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
 
     @GetMapping
     public ResponseEntity<List<ThreatCategoryDto>> getAllCategories() {
