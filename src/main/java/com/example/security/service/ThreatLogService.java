@@ -278,8 +278,7 @@ public class ThreatLogService extends AbstractCrudService<ThreatLog, Long> {
             // 🔒 가상 방화벽 차단 정책 검사: 출발지 IP가 blocked_ips에 등록된 경우 BLOCKED 처리
             if (blockedIpRepository.existsByIpAddress(sourceIp)) {
                 log.setStatus("BLOCKED");
-                org.slf4j.LoggerFactory.getLogger(ThreatLogService.class)
-                    .warn("[FIREWALL] Syslog from blocked IP {} dropped and marked BLOCKED.", sourceIp);
+                ThreatLogService.log.warn("[FIREWALL] Syslog from blocked IP {} dropped and marked BLOCKED.", sourceIp);
             } else {
                 log.setStatus("DETECTED");
             }
@@ -288,8 +287,7 @@ public class ThreatLogService extends AbstractCrudService<ThreatLog, Long> {
             save(log);
 
         } catch (Exception e) {
-            org.slf4j.LoggerFactory.getLogger(ThreatLogService.class)
-                .error("Error processing async syslog message: {}", e.getMessage(), e);
+            ThreatLogService.log.error("Error processing async syslog message: {}", e.getMessage(), e);
         }
     }
 
@@ -338,8 +336,7 @@ public class ThreatLogService extends AbstractCrudService<ThreatLog, Long> {
             // 🔒 가상 방화벽 차단 정책 검사: 출발지 IP가 blocked_ips에 등록된 경우 BLOCKED 처리
             if (blockedIpRepository.existsByIpAddress(srcIp)) {
                 log.setStatus("BLOCKED");
-                org.slf4j.LoggerFactory.getLogger(ThreatLogService.class)
-                    .warn("[FIREWALL] Webhook from blocked IP {} dropped and marked BLOCKED.", srcIp);
+                ThreatLogService.log.warn("[FIREWALL] Webhook from blocked IP {} dropped and marked BLOCKED.", srcIp);
             } else {
                 log.setStatus(payload.getStatus() != null ? payload.getStatus() : "DETECTED");
             }
@@ -348,8 +345,7 @@ public class ThreatLogService extends AbstractCrudService<ThreatLog, Long> {
             save(log);
 
         } catch (Exception e) {
-            org.slf4j.LoggerFactory.getLogger(ThreatLogService.class)
-                .error("Error processing async webhook log: {}", e.getMessage(), e);
+            ThreatLogService.log.error("Error processing async webhook log: {}", e.getMessage(), e);
         }
     }
 }
